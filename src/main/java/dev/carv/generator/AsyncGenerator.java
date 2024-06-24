@@ -25,7 +25,7 @@ public class AsyncGenerator extends RecursiveAction {
 
     @Override
     protected void compute() {
-        int threshold = 100;
+        int threshold = 2_500;
         if (end - start <= threshold) {
             for (int i = start; i < end; i++) {
                 result.add(faker.name().firstName());
