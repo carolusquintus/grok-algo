@@ -1,7 +1,5 @@
 package dev.carv.search;
 
-import dev.carv.search.BinarySearch;
-import dev.carv.search.LinearSearch;
 import dev.carv.util.Reader;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
