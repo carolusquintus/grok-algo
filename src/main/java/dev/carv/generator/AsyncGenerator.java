@@ -1,47 +1,19 @@
 package dev.carv.generator;
 
-import com.github.javafaker.Faker;
-import lombok.RequiredArgsConstructor;
-
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.RecursiveAction;
+import java.util.concurrent.ForkJoinPool;
+import java.util.function.Supplier;
 
-@RequiredArgsConstructor
-public class AsyncGenerator extends RecursiveAction {
-
-    private final int start;
-    private final int end;
-
-    private final Faker faker = new Faker();
-
-    private final Set<String> result = new HashSet<>();
-
-    public List<String> getResult() {
-        return new ArrayList<>(result);
-    }
+public class AsyncGenerator<T> implements Generator<T> {
 
     @Override
-    protected void compute() {
-        int threshold = 2_500;
-        if (end - start <= threshold) {
-            for (int i = start; i < end; i++) {
-                result.add(faker.name().firstName());
-            }
-        } else {
-            int middle = (end + start) / 2;
-            var left = new AsyncGenerator(start, middle);
-            var right = new AsyncGenerator(middle, end);
+    public List<T> apply(int quantity, Supplier<T> supplier) {
+        var pool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
+        var action = new ActionSupplier<T>(0, quantity, supplier);
+        pool.invoke(action);
 
-            left.fork();
-            right.compute();
-            left.join();
-
-            result.addAll(left.result);
-            result.addAll(right.result);
-        }
+        return new ArrayList<>(action.getResult());
     }
 
 }
