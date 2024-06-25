@@ -17,16 +17,15 @@ public class SearchMain {
         var linear = new LinearSearch<String>();
         var found = linear.search("Hallie", names);
         watch.stop();
-
         log.debug("Found {}", found);
         log.debug("Time {}μs", watch.getTime(MICROSECONDS));
+
 
         watch = new StopWatch();
         watch.start();
         var binary = new BinarySearch<String>();
         found = binary.search("Jonas", names);
         watch.stop();
-
         log.debug("Found {}", found);
         log.debug("Time {}μs", watch.getTime(MICROSECONDS));
     }
